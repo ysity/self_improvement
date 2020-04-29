@@ -1,0 +1,46 @@
+body{
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    background-color: #D5ECE7;
+}
+
+.container{
+    margin: auto;
+    width: 80%;
+}
+.header{
+    display: flex;
+    justify-content: center;
+    height: 80px;
+    background-color: #66ccff;
+    line-height: 80px;
+    color: white;
+    font-size: 30px;
+}
+.body{
+    margin-top: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.content{
+    width: 80%;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+ul{
+    list-style: none;
+}
+li{
+    padding: 10px 0 10px 0;
+    border-top: dotted 1px #c7cfcf
+}
+li a{
+    padding: 0 0 0 10px;
+    text-decoration: none;
+}
+
