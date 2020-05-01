@@ -1,6 +1,7 @@
 package com.crescentd.controller;
 
 import cn.hutool.crypto.SecureUtil;
+import com.crescentd.common.lang.LoginRegEnum;
 import com.crescentd.common.lang.Result;
 import com.crescentd.entity.User;
 import com.crescentd.entity.vo.RequestVo;
@@ -25,7 +26,6 @@ import java.io.IOException;
  * @date 2020/4/27
  **/
 @Controller
-@RequestMapping("/auth")
 public class IndexController extends BaseController {
 
     private static final String KAPTCHA_SESSION_KEY = "KAPTCHA_SESSION_KEY";
@@ -35,8 +35,13 @@ public class IndexController extends BaseController {
     @Autowired
     private Producer producer;
 
+    @RequestMapping("/index")
+    public String index(){
+        return "/index";
+    }
 
-    @RequestMapping("/kaptcha.jpg")
+
+    @RequestMapping("/auth/kaptcha.jpg")
     public void kaptcha(HttpServletResponse response) throws IOException {
         String text = producer.createText();
         BufferedImage image = producer.createImage(text);
@@ -47,12 +52,12 @@ public class IndexController extends BaseController {
         ImageIO.write(image,"jpg",outputStream);
     }
 
-    @RequestMapping({"","/","/login"})
+    @RequestMapping("/auth")
     public String login(){
         return "/auth/login";
     }
 
-    @RequestMapping("/doLogin")
+    @RequestMapping("/auth/doLogin")
     @ResponseBody
     public Result doLogin(String username, String password){
         if (StringUtils.isEmpty(username)||StringUtils.isEmpty(password)){
@@ -63,13 +68,13 @@ public class IndexController extends BaseController {
             SecurityUtils.getSubject().login(token);
         } catch (AuthenticationException e) {
             if (e instanceof UnknownAccountException){
-                return Result.fail("用户不存在");
+                return Result.fail(LoginRegEnum.UnknownAccount.getMsg(),LoginRegEnum.UnknownAccount.getCode());
             }else if (e instanceof LockedAccountException){
-                return Result.fail("用户被禁用");
+                return Result.fail(LoginRegEnum.LockedAccount.getMsg(),LoginRegEnum.LockedAccount.getCode());
             }else if (e instanceof IncorrectCredentialsException){
-                return Result.fail("密码不正确");
+                return Result.fail(LoginRegEnum.IncorrectCredentials.getMsg(),LoginRegEnum.IncorrectCredentials.getCode());
             }else {
-                return Result.fail("用户认证失败");
+                return Result.fail(LoginRegEnum.AuthFailed.getMsg(),LoginRegEnum.AuthFailed.getCode());
             }
         }
         Result result = new Result();
@@ -79,12 +84,12 @@ public class IndexController extends BaseController {
     }
 
 
-    @RequestMapping("/reg")
+    @RequestMapping("/auth/reg")
     public String reg(){
         return "/auth/reg";
     }
 
-    @RequestMapping("/register")
+    @RequestMapping("/auth/register")
     @ResponseBody
     public Result doRegister(@RequestBody RequestVo requestVo){
         String kaptcha = (String) SecurityUtils.getSubject().getSession().getAttribute(KAPTCHA_SESSION_KEY);
@@ -103,8 +108,15 @@ public class IndexController extends BaseController {
     }
 
 
-    @RequestMapping("/register_login")
+    @RequestMapping("/auth/register_login")
     public String register_done(){
         return "/auth/register_login";
+    }
+
+    @RequestMapping("/auth/logout")
+    @ResponseBody
+    public Result logout(){
+        SecurityUtils.getSubject().logout();
+        return Result.succ("退出成功");
     }
 }

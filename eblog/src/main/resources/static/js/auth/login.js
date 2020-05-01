@@ -29,9 +29,27 @@ let login = {
                     'password' : password
                 },
                 success : function (result) {
-                    if (result != null && result.code == '200'){
-                        location.href = result.action
+                    if (result != null){
+                        if (result.code == '200'){
+                            location.href = result.action
+                        }
+                        if (result.code == '501'){
+                            alert(result.msg + "请先去注册")
+                            location.href = "/auth/reg"
+                        }
+                        if(result.code == '502'){
+                            alert(result.msg)
+                            $('#login-password').val()
+                        }
+                        if (result.code == '503'){
+                            alert(result.msg)
+                        }
+                        if(result.code == '504'){
+                            alert(result.msg)
+                            location.href = "/index"
+                        }
                     }
+
                 },
                 error : function (res) {
                     console.log(res)

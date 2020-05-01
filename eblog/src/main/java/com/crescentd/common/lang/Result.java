@@ -1,6 +1,8 @@
 package com.crescentd.common.lang;
 
 import lombok.Data;
+import lombok.NonNull;
+import org.springframework.lang.Nullable;
 
 /**
  * @author dyh
@@ -35,9 +37,18 @@ public class Result {
         return result;
     }
 
+
     public static Result fail(String message){
         Result result = new Result();
+        result.setMsg(message);
         result.setCode("500");
+        result.setData(null);
+        return result;
+    }
+
+    public static Result fail(String message,@Nullable String code){
+        Result result = new Result();
+        result.setCode(code==null?"500":code);
         result.setMsg(message);
         result.setData(null);
         return result;

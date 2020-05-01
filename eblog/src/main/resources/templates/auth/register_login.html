@@ -5,6 +5,27 @@
     <title>注册或登录后</title>
 </head>
 <body>
-注册或者登录成功后
+注册或者登录成功
+<div>
+    <button id="logout">退出</button>
+</div>
+
+
+<script src="../../js/common/jquery.min.js"></script>
+<script>
+    $('#logout').click(function () {
+        $.ajax({
+            url : '/auth/logout',
+            type : 'get',
+            data:{},
+            success : function (result) {
+                if (result != null && result.code == '200'){
+                    location.href = '/index'
+                }
+            }
+        })
+    })
+</script>
 </body>
+
 </html>

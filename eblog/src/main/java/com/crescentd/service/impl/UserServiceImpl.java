@@ -52,7 +52,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         user1.setCommentCount(0);
         user1.setPostCount(0);
         user1.setGender("0");
-        return this.save(user1) ? Result.succ() : Result.fail("注册失败");
+        return this.save(user1) ? Result.succ() : Result.fail("注册失败",null);
     }
 
     @Override
